@@ -4,8 +4,8 @@ echo 'start'
 echo $(ls /usr/lib/imperial)
 
 ##build Go API
-go get -d ../api all
-go build ../api/main.go
+sudo go get -d /usr/lib/imperial/api all
+sudo go build /usr/lib/imperial/api/main.go
 
 ##build Vue app
-npm run build npm run build --prefix ../imperial/presentation/
+sudo npm run build npm run build --prefix /usr/lib/imperial/presentation/
