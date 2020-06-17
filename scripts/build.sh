@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo $PWD
+echo $(ls)
 
 ##build Go API
 go get -d ../api all
