@@ -1,0 +1,23 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /imperial
+
+hooks:
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 180
+      runas: ubuntu
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 180
+      runas: ubuntu
+  AfterInstall:
+    - location: scripts/build.sh
+      timeout: 180
+      runas: ubuntu
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 180
+      runas: ubuntu

@@ -1,0 +1,38 @@
+$ sudo nano /lib/systemd/system/imperial.service
+
+"
+[Unit]
+Description=imperial
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/home/ubuntu/go/imperial/api/main
+
+[Install]
+WantedBy=multi-user.target
+"
+
+$sudo service imperial start ==> Start service
+$sudo service imperial status ==> Check status
+
+
+$cd /etc/nginx/sites-available
+$sudo nano imperial.leal.im
+
+"
+server {
+    server_name imperial.leal.im;
+
+    location / {
+        proxy_pass http://localhost:9990;
+    }
+}
+"
+
+$sudo ln -s /etc/nginx/sites-available/imperial.leal.im /etc/nginx/sites-enabled/imperial.leal.im ===> create simlink
+$sudo nginx -s reload
+
+****ADD SSL Certificate
+$sudo certbot --nginx -d imperial.leal.im
