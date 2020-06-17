@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $PWD
+
 ##build Go API
 go get -d ../api all
 go build ../api/main.go
