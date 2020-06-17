@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo $PWD
-echo $(ls)
+echo 'start'
+echo $(ls /usr/lib/imperial)
 
 ##build Go API
 go get -d ../api all

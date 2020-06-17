@@ -1,4 +1,4 @@
 #!/bin/bash
-echo $PWD
-echo $(ls)
+echo 'start'
+echo $(ls /usr/lib/imperial)
 sudo nginx -s reload
