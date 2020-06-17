@@ -64,7 +64,7 @@ func main() {
 	//	AllowedMethods: []string{"GET", "POST"},
 	//	AllowedHeaders: []string{"Content-Type", "Origin", "Accept", "*"},
 	//})
-
+	http.HandleFunc("/info", helloHandler)
 	http.Handle("/", jwtMiddleware.Handler(http.HandlerFunc(helloHandler)))
 
 	log.Println("Listing for requests at http://localhost:3333/hello")

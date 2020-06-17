@@ -1,4 +1,4 @@
 #!/bin/bash
 echo 'start'
-echo $(ls /usr/lib/imperial)
+#sudo service imperial stop
 sudo nginx -s reload

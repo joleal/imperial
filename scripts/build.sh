@@ -7,7 +7,7 @@ sudo go build /usr/lib/imperial/api/main.go
 
 ##build Vue app
 echo 'instal presentation packages'
-sudo npm install --prefix /usr/lib/imperial/presentation/
+cd /usr/lib/imperial/presentation && sudo npm install --unsafe-perm=true --allow-root
 
 echo 'build presentation'
-sudo npm run build npm run build --prefix /usr/lib/imperial/presentation/
+cd /usr/lib/imperial/presentation && sudo npm run build

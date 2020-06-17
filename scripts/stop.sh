@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo service imperial stop
+#sudo service imperial stop
