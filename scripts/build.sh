@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ##build Go API
-go get -d ./api all
-go build ./api/main.go
+go get -d ../api all
+go build ../api/main.go
 
 ##build Vue app
-npm run build npm run build --prefix ./imperial/presentation/
+npm run build npm run build --prefix ../imperial/presentation/
