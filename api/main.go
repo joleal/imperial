@@ -8,6 +8,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	//"github.com/rs/cors"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -83,8 +84,9 @@ func getPemCert(token *jwt.Token) (string, error) {
 	defer resp.Body.Close()
 
 	var jwks = Jwks{}
-	err = json.NewDecoder(resp.Body).Decode(&jwks)
-
+	//err = json.NewDecoder(resp.Body).Decode(&jwks)
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(bodyBytes, &jwks)
 	if err != nil {
 		log.Println("couldn't decode body")
 		return cert, err
