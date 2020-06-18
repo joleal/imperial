@@ -74,7 +74,7 @@ func main() {
 
 func getPemCert(token *jwt.Token) (string, error) {
 	cert := ""
-	resp, err := http.Get("https://imperialapi.leal.im/.well-known/jwks.json")
+	resp, err := http.Get("https://dev-1vkyztq3.eu.auth0.com/.well-known/jwks.json")
 
 	if err != nil {
 		log.Println("couldn't get resp")
