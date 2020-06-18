@@ -4,7 +4,6 @@ import { authGuard } from "../auth/authGuard";
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue";
 
-
 Vue.use(VueRouter);
 
 const routes = [
