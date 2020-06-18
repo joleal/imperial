@@ -31,7 +31,7 @@ server {
 }
 "
 
-$sudo ln -s /etc/nginx/sites-available/imperial.leal.im /etc/nginx/sites-enabled/imperial.leal.im ===> create simlink
+$sudo ln -s /etc/nginx/sites-available/imperialapi.leal.im /etc/nginx/sites-enabled/imperialapi.leal.im ===> create simlink
 $sudo nginx -s reload
 
 ****ADD SSL Certificate
