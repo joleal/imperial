@@ -77,6 +77,7 @@ func getPemCert(token *jwt.Token) (string, error) {
 	resp, err := http.Get("https://imperialapi.leal.im/.well-known/jwks.json")
 
 	if err != nil {
+		log.Println("couldn't get resp")
 		return cert, err
 	}
 	defer resp.Body.Close()
@@ -85,6 +86,7 @@ func getPemCert(token *jwt.Token) (string, error) {
 	err = json.NewDecoder(resp.Body).Decode(&jwks)
 
 	if err != nil {
+		log.Println("couldn't decode body")
 		return cert, err
 	}
 
