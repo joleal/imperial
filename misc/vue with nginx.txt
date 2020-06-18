@@ -1,0 +1,6 @@
+server {
+        server_name imperial.leal.im;
+
+        root /usr/lib/imperial/presentation/dist;
+        index   index.html;
+}
