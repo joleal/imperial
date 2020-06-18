@@ -1,25 +1,20 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-
-    <!-- Check that the SDK client is not currently loading before accessing is methods -->
-    <div v-if="!$auth.loading">
-      <!-- show login when not authenticated -->
-      <button v-if="!$auth.isAuthenticated" @click="login">Log in</button>
-      <!-- show logout when authenticated -->
-      <button v-if="$auth.isAuthenticated" @click="logout">Log out</button>
-    </div>
+    <Dashboard v-if="$auth.isAuthenticated"/>
+    <Landing v-if="!$auth.isAuthenticated" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Dashboard from "@/components/Dashboard.vue";
+import Landing from "@/components/Landing.vue";
 
 export default {
   name: "home",
   components: {
-    HelloWorld
+    Dashboard,
+    Landing
   },
   methods: {
     // Log the user in

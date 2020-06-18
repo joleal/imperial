@@ -1,43 +1,69 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app 
+    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app v-if="$auth.isAuthenticated" 
           expand-on-hover
       permanent>
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link to="/">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link to="/">Home</router-link>
+              Dashboard
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/about">
-          <v-list-item-action >
-            <v-icon>mdi-email</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>
-              About
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item profile v-if="$auth.isAuthenticated">
+        
+          <v-list-group
+            no-action
+            >
+            <template v-slot:prependIcon>
+              <v-badge color="pink" left overlap dot offset-x="0" offset-y="0" >
+                    <v-icon>mdi-puzzle</v-icon>
+                    </v-badge>
+              </template>
+
+            <template v-slot:activator>
+              
+              <v-list-item-title>
+                Games
+              </v-list-item-title>
+
+        
+            </template>
+            <v-list-item 
+              v-for="(game, i) in ['game 1', 'game 2','game 3']" :key="i" link to="/about">
+              <v-list-item-title v-text="game"></v-list-item-title>
+              <v-list-item-action>
+                <v-icon color="pink lighten-1">mdi-play</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list-group>
+        <v-list-item profile link to="/profile">
           <v-list-item-action>
-            <v-icon>mdi-email</v-icon>
+            <v-icon>mdi-tournament</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link to="/profile">Profile</router-link>
+              Tournament
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item profile link to="/profile">
+          <v-list-item-action>
+            <v-icon>mdi-trophy</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>
+              Hall of Fame
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="green darken-3" dark dense>
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="green darken-3" dark dense v-if="$auth.isAuthenticated">
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Imperial</span>
       </v-toolbar-title>
