@@ -46,7 +46,7 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              Tournament
+              Tournaments
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -103,13 +103,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col class="text-center">
-            <router-view />
-          </v-col>
-        </v-row>
-      </v-container>
+      <router-view />
     </v-main>
   </v-app>
 </template>
