@@ -37,16 +37,16 @@ func main() {
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			// Verify 'aud' claim
-			aud := "https://dev-1vkyztq3.eu.auth0.com/"
+			aud := "https://imperialapi.leal.im"
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
-				return token, errors.New("Invalid audience.")
+				return token, errors.New("Invalid audience")
 			}
 			// Verify 'iss' claim
-			iss := "https://imperialapi.leal.im"
+			iss := "https://dev-1vkyztq3.eu.auth0.com/"
 			checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(iss, false)
 			if !checkIss {
-				return token, errors.New("Invalid issuer.")
+				return token, errors.New("Invalid issuer")
 			}
 
 			cert, err := getPemCert(token)
