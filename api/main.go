@@ -43,7 +43,7 @@ func main() {
 				return token, errors.New("Invalid audience.")
 			}
 			// Verify 'iss' claim
-			iss := "https://imperialapi.leal.im/"
+			iss := "https://imperialapi.leal.im"
 			checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(iss, false)
 			if !checkIss {
 				return token, errors.New("Invalid issuer.")
