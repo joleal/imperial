@@ -6,8 +6,9 @@ import (
 	"errors"
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
-	//"github.com/rs/cors"
-	"io"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -31,8 +32,29 @@ type JSONWebKeys struct {
 }
 
 func main() {
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Imperial\n")
+	r := mux.NewRouter()
+
+	helloHandler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.Method {
+		case "GET":
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message": "get called"}`))
+		case "POST":
+			w.WriteHeader(http.StatusCreated)
+			w.Write([]byte(`{"message": "post called"}`))
+		case "PUT":
+			w.WriteHeader(http.StatusAccepted)
+			w.Write([]byte(`{"message": "put called"}`))
+		case "DELETE":
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message": "delete called"}`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(`{"message": "not found"}`))
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message": "hello world"}`))
 	}
 
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
@@ -61,15 +83,16 @@ func main() {
 		SigningMethod: jwt.SigningMethodRS256,
 	})
 
-	//corsWrapper := cors.New(cors.Options{
-	//	AllowedMethods: []string{"GET", "POST"},
-	//	AllowedHeaders: []string{"Content-Type", "Origin", "Accept", "*"},
-	//})
-	http.HandleFunc("/info", helloHandler)
-	http.Handle("/", jwtMiddleware.Handler(http.HandlerFunc(helloHandler)))
+	corsWrapper := cors.New(cors.Options{
+		AllowedMethods: []string{"GET", "POST"},
+		AllowedHeaders: []string{"Content-Type", "Origin", "Accept", "*"},
+	})
+
+	r.HandleFunc("/info", helloHandler)
+	r.Handle("/", jwtMiddleware.Handler(http.HandlerFunc(helloHandler)))
 
 	log.Println("Listing for requests at http://localhost:3333/hello")
-	log.Fatal(http.ListenAndServe(":3333", nil))
+	log.Fatal(http.ListenAndServe(":3333", corsWrapper.Handler(r)))
 
 }
 

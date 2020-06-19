@@ -45,14 +45,27 @@ export const useAuth0 = ({
         }
 
         this.user = await this.auth0Client.getUser();
+        const token = await this.auth0Client.getIdTokenClaims();
+        console.log(token.__raw);
+        const response = await fetch("http://localhost:3333/", {
+            "method": "GET",
+            "mode": 'no-cors',
+            "headers": {
+                "Access-Control-Allow-Origin":"*",
+                "Authorization": `Bearer ${token.__raw}`
+            }
+        });
+        this.user.response = response;
         this.isAuthenticated = true;
       },
       /** Handles the callback when logging in using a redirect */
       async handleRedirectCallback() {
+        console.log('redirect');
         this.loading = true;
         try {
           await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
+          console.log('redirect');
           this.isAuthenticated = true;
         } catch (e) {
           this.error = e;

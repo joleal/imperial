@@ -40,7 +40,7 @@
               </v-list-item-action>
             </v-list-item>
           </v-list-group>
-        <v-list-item profile link to="/profile">
+        <v-list-item link to="/tournaments">
           <v-list-item-action>
             <v-icon>mdi-tournament</v-icon>
           </v-list-item-action>
@@ -50,7 +50,7 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item profile link to="/profile">
+        <v-list-item link to="/hof">
           <v-list-item-action>
             <v-icon>mdi-trophy</v-icon>
           </v-list-item-action>
@@ -94,12 +94,29 @@
           </v-list>
         </v-card>
       </v-menu>
-
-      <v-btn icon large>
-        <v-avatar size="32px" item>
-          <v-img :src="$auth.user.picture" />
-        </v-avatar>
-      </v-btn>
+      <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x offset-y> 
+        <template v-slot:activator="{ on, attrs2 }">
+          <v-btn  v-bind="attrs2" v-on="on" icon large>
+            <v-avatar size="32px" item>
+              <v-img :src="$auth.user.picture" />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-list dense>
+            <v-list-item-group>
+              <v-list-item>
+                Profile
+              </v-list-item>
+              <v-divider></v-divider>
+              <v-list-item @click="logout()">
+                Logout
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-menu>
+      
     </v-app-bar>
 
     <v-main>
@@ -114,7 +131,14 @@ export default {
     source: String
   },
   components: {},
-
+  methods: {
+    // Log the user out
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin
+      });
+    }
+  },
   data: () => ({
     drawer: true,
     mini: true,
