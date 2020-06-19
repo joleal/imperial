@@ -27,13 +27,40 @@
         </v-layout>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <h2>test</h2>
+        <v-btn @click="testAPI">Test asd asd as</v-btn>
+        <div>{{ result }}</div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import axios from "axios"
+
 export default {
   name: "Dashboard",
   methods: {
+    async testAPI() {
+      const token = await this.$auth.getTokenSilently();
+      const options = {
+          url: `${process.env.VUE_APP_BASE_URI}/user/register`, 
+          method: 'POST',
+          headers: {
+                "Authorization": `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8'
+              },
+          data: {
+                nickname: this.$auth.user.nickname,
+                email: this.$auth.user.email
+              }
+      };
+      const response = await axios(options);
+      this.$set(this, 'result', response);
+    }
     
   },
   data: () => ({
@@ -47,8 +74,8 @@ export default {
         {gameID: 1, name: "game 1", players: ["joao","pedro","paulo","nuno"], activePlayer: "joao"},
         {gameID: 2, name: "game 2", players: ["joao","pedro","paulo"], activePlayer: "joao"},
         {gameID: 3, name: "game 3", players: ["joao","pedro","paulo","zé","nuno"], activePlayer: "joao"}
-    ]
-
+    ],
+    result: "nothing"
   })
 };
 </script>

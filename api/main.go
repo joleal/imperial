@@ -6,12 +6,15 @@ import (
 	"errors"
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/handlers"
+	//"github.com/gorilla/handlers"
+	//"fmt"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/joleal/imperial/api/controllers"
 )
 
 type Response struct {
@@ -32,30 +35,8 @@ type JSONWebKeys struct {
 }
 
 func main() {
-	r := mux.NewRouter()
 
-	helloHandler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		switch r.Method {
-		case "GET":
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"message": "get called"}`))
-		case "POST":
-			w.WriteHeader(http.StatusCreated)
-			w.Write([]byte(`{"message": "post called"}`))
-		case "PUT":
-			w.WriteHeader(http.StatusAccepted)
-			w.Write([]byte(`{"message": "put called"}`))
-		case "DELETE":
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"message": "delete called"}`))
-		default:
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(`{"message": "not found"}`))
-		}
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"message": "hello world"}`))
-	}
+	r := mux.NewRouter()
 
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
@@ -88,10 +69,17 @@ func main() {
 		AllowedHeaders: []string{"Content-Type", "Origin", "Accept", "*"},
 	})
 
-	r.HandleFunc("/info", helloHandler)
-	r.Handle("/", jwtMiddleware.Handler(http.HandlerFunc(helloHandler)))
+	u := &controllers.User{}
 
-	log.Println("Listing for requests at http://localhost:3333/hello")
+	secureHandle := func(path string, handler http.Handler) *mux.Route {
+		return r.Handle(path, jwtMiddleware.Handler(handler))
+	}
+
+	r.HandleFunc("/info", u.HelloHandler)
+	secureHandle("/", http.HandlerFunc(u.HelloHandler))
+	secureHandle("/user/register", http.HandlerFunc(u.RegisterHandler)).Methods("POST")
+
+	log.Println("Listing for requests at http://localhost:3333/")
 	log.Fatal(http.ListenAndServe(":3333", corsWrapper.Handler(r)))
 
 }

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##overwrite db file
+sudo echo "{\"database_file\": \"/home/ubuntu/config/database.yml\",\"environment\":\"production\"}" > /usr/lib/imperial/api/config/db_settings/db.json 
+
 echo 'build'
 ##build Go API
 cd /usr/lib/imperial/api && go get all

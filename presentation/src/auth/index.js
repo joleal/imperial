@@ -1,5 +1,6 @@
 import Vue from "vue";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import axios from "axios"
 
 /** Define a default action to perform after authentication */
 const DEFAULT_REDIRECT_CALLBACK = () =>
@@ -45,17 +46,6 @@ export const useAuth0 = ({
         }
 
         this.user = await this.auth0Client.getUser();
-        const token = await this.auth0Client.getIdTokenClaims();
-        console.log(token.__raw);
-        const response = await fetch("http://localhost:3333/", {
-            "method": "GET",
-            "mode": 'no-cors',
-            "headers": {
-                "Access-Control-Allow-Origin":"*",
-                "Authorization": `Bearer ${token.__raw}`
-            }
-        });
-        this.user.response = response;
         this.isAuthenticated = true;
       },
       /** Handles the callback when logging in using a redirect */
@@ -65,8 +55,22 @@ export const useAuth0 = ({
         try {
           await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
-          console.log('redirect');
           this.isAuthenticated = true;
+
+          //register user with the API
+          const token = await this.$auth.getTokenSilently();
+          const response = await axios.post(`${process.env.VUE_APP_BASE_URI}/user/register`, {
+              "mode": 'no-cors',
+              "headers": {
+                  "Access-Control-Allow-Origin":"*",
+                  "Authorization": `Bearer ${token}`
+              },
+              "body": JSON.stringify({
+                nickname: this.user.nickname,
+                email: this.user.email
+              })
+          });
+          console.log(response)
         } catch (e) {
           this.error = e;
         } finally {

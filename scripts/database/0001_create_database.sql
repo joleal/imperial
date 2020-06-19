@@ -1,7 +1,6 @@
 --CREATE USER TABLE
-
 CREATE TABLE IF NOT EXISTS user (
-    user_id bigint unsigned default(uuid_short()) primary key,
+    user_id varchar(255) NOT NULL primary key,
     email varchar(255) NOT NULL,
     nickname varchar(255) NOT NULL
 );
