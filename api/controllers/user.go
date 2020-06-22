@@ -35,6 +35,26 @@ func (u *User) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"message": "ok"}`))
 }
 
+//Users returns a list of registered users in the database
+func (u *User) Users(w http.ResponseWriter, r *http.Request) {
+	v := r.URL.Query()
+	name := v.Get("name")
+
+	users, err := models.SearchUsers(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(users)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write([]byte(jsonResponse))
+	w.Header().Set("Content-Type", "application/json")
+}
+
 //HelloHandler handles hello world request
 func (u *User) HelloHandler(w http.ResponseWriter, r *http.Request) {
 

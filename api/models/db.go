@@ -37,8 +37,10 @@ func (db *Db) connect() {
 }
 
 func (db *Db) closeConnection() {
-	db.conn.Close()
-	db.conn = nil
+	if db.conn != nil {
+		db.conn.Close()
+		db.conn = nil
+	}
 }
 
 //Query executes a query
@@ -59,6 +61,32 @@ func (db *Db) Query(query string, args ...interface{}) (*sql.Rows, error) {
 		fmt.Println(err)
 	}
 
-	db.closeConnection()
 	return rows, err
+}
+
+//InsertAndReturn executes an insert and returns the last inserted id
+func (db *Db) InsertAndReturn(query string, args ...interface{}) (int64, error) {
+	if db.conn == nil {
+		db.connect()
+	}
+
+	statement, err := db.conn.Prepare(query)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	res, err := statement.Exec(args...) // execute our statement
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	lid, err := res.LastInsertId()
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	return lid, nil
 }

@@ -6,6 +6,7 @@ import Game from "../views/Game.vue";
 import Tournaments from "../views/Tournaments.vue";
 import HallOfFame from "../views/HallOfFame.vue";
 import Profile from "../views/Profile.vue";
+import Create from '@/views/Create.vue'
 
 Vue.use(VueRouter);
 
@@ -16,7 +17,7 @@ const routes = [
     component: Home
   },
   {
-    path: "/game",
+    path: "/game/:id",
     name: "Game",
     component: Game,
     beforeEnter: authGuard
@@ -37,6 +38,12 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: Profile,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/create",
+    name: "create",
+    component: Create,
     beforeEnter: authGuard
   }
 ];

@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS game (
     version varchar(20) NULL,
     number_of_players	INT NOT NULL,
     investor_card bit NOT NULL DEFAULT 1,
-    tax_increase_only_bonus bit
+    tax_increase_only_bonus bit,
+    starting_mode varchar(20)
 );
 
 CREATE TABLE IF NOT EXISTS game_version (
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS game_version (
 CREATE TABLE IF NOT EXISTS game_player (
     id bigint unsigned default(uuid_short()) primary key,
     fk_game bigint,
-    fk_user bigint,
+    fk_user varchar(255),
 	money    int,
 	play_order    int,
 	investor bool
@@ -38,3 +39,5 @@ CREATE TABLE IF NOT EXISTS game_settings (
     fk_game bigint,
     fk_user bigint
 );
+
+ALTER TABLE game_player MODIFY fk_user VARCHAR(255);

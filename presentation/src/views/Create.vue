@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h1>Coming soon</h1>
-    Game - {{ $route.params.id }}
+    <CreateGame />
   </div>
 </template>
 
 <script>
+import CreateGame from "@/components/CreateGame"
 export default {
-  name: "game",
+  name: "create",
   components: {
-    
+    CreateGame
   },
   methods: {
     

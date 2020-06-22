@@ -47,6 +47,22 @@ export const useAuth0 = ({
 
         this.user = await this.auth0Client.getUser();
         this.isAuthenticated = true;
+        /** Register user on the database */
+        const token = await this.auth0Client.getTokenSilently();
+        const options = {
+            url: `${process.env.VUE_APP_BASE_URI}/user/register`, 
+            method: 'POST',
+            headers: {
+                  "Authorization": `Bearer ${token}`,
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json;charset=UTF-8'
+                },
+            data: {
+                  nickname: this.user.nickname,
+                  email: this.user.email
+                }
+        };
+        await axios(options);
       },
       /** Handles the callback when logging in using a redirect */
       async handleRedirectCallback() {
@@ -56,21 +72,6 @@ export const useAuth0 = ({
           await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
           this.isAuthenticated = true;
-
-          //register user with the API
-          const token = await this.$auth.getTokenSilently();
-          const response = await axios.post(`${process.env.VUE_APP_BASE_URI}/user/register`, {
-              "mode": 'no-cors',
-              "headers": {
-                  "Access-Control-Allow-Origin":"*",
-                  "Authorization": `Bearer ${token}`
-              },
-              "body": JSON.stringify({
-                nickname: this.user.nickname,
-                email: this.user.email
-              })
-          });
-          console.log(response)
         } catch (e) {
           this.error = e;
         } finally {

@@ -7,7 +7,7 @@ import store from "./store";
 import { domain, clientId, audience } from "../auth_config.json";
 
 // Import the plugin here
-import { Auth0Plugin } from "./auth";
+import { Auth0Plugin, getInstance  } from "./auth";
 
 import vuetify from "./plugins/vuetify";
 
@@ -31,5 +31,13 @@ new Vue({
   router,
   store,
   vuetify,
+  created: function(){
+    const instance = getInstance();
+    instance.$watch("loading", async loading => {
+      if (!loading && instance.isAuthenticated) { 
+        this.$store.dispatch('updateState');
+      }
+    });
+  },
   render: h => h(App)
 }).$mount("#app");

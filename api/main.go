@@ -69,15 +69,20 @@ func main() {
 		AllowedHeaders: []string{"Content-Type", "Origin", "Accept", "*"},
 	})
 
-	u := &controllers.User{}
-
 	secureHandle := func(path string, handler http.Handler) *mux.Route {
 		return r.Handle(path, jwtMiddleware.Handler(handler))
 	}
 
-	r.HandleFunc("/info", u.HelloHandler)
-	secureHandle("/", http.HandlerFunc(u.HelloHandler))
+	//r.HandleFunc("/info", u.HelloHandler)
+	//secureHandle("/", http.HandlerFunc(u.HelloHandler))
+
+	u := &controllers.User{}
 	secureHandle("/user/register", http.HandlerFunc(u.RegisterHandler)).Methods("POST")
+	secureHandle("/users", http.HandlerFunc(u.Users)).Methods("GET")
+
+	g := &controllers.Game{}
+	secureHandle("/games", http.HandlerFunc(g.GetActiveGames)).Methods("GET")
+	secureHandle("/game", http.HandlerFunc(g.CreateGame)).Methods("POST")
 
 	log.Println("Listing for requests at http://localhost:3333/")
 	log.Fatal(http.ListenAndServe(":3333", corsWrapper.Handler(r)))

@@ -8,12 +8,39 @@
         
 
             <v-layout child-flex>
-        <v-data-table
+        <v-data-table dense
             height="400px"
             width="100%"
             fixed-header
             :headers="headers"
-            :items="games"
+            :items="activeGames"
+            :items-per-page="5"
+            class="elevation-1"
+        >
+            <template v-slot:item.ID="{ item }">
+                <v-btn text small color="primary" to="/about">{{item.ID}}</v-btn>
+            </template>
+            <template v-slot:item.players="{ item }">
+                <div v-for="(player, i) in item.players" :key="i" >{{ player }}</div>
+            </template>
+        </v-data-table> 
+        </v-layout>
+      </v-col>
+    </v-row>
+    <v-row> 
+      <v-col cols="12" class="mb-4">
+        <h2 class="display-2 font-weight-bold mb-3">
+          Open Games
+        </h2>
+        
+
+            <v-layout child-flex>
+        <v-data-table dense
+            height="400px"
+            width="100%"
+            fixed-header
+            :headers="headers"
+            :items="activeGames"
             :items-per-page="5"
             class="elevation-1"
         >
@@ -29,46 +56,29 @@
     </v-row>
     <v-row>
       <v-col>
-        <h2>test</h2>
-        <v-btn @click="testAPI">Test asd asd as</v-btn>
-        <div>{{ result }}</div>
+        {{ activeGames }}
       </v-col>
-    </v-row>
+    </v-row> 
   </v-container>
 </template>
 
 <script>
-import axios from "axios"
+import { mapState } from 'vuex';
 
 export default {
   name: "Dashboard",
   methods: {
-    async testAPI() {
-      const token = await this.$auth.getTokenSilently();
-      const options = {
-          url: `${process.env.VUE_APP_BASE_URI}/user/register`, 
-          method: 'POST',
-          headers: {
-                "Authorization": `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json;charset=UTF-8'
-              },
-          data: {
-                nickname: this.$auth.user.nickname,
-                email: this.$auth.user.email
-              }
-      };
-      const response = await axios(options);
-      this.$set(this, 'result', response);
-    }
     
+  },
+  computed: {
+    ...mapState(['activeGames'])
   },
   data: () => ({
     headers:[
-        {text: "Game Id", align:"start", sortable:"false", value: "gameID"},
+        {text: "Game Id", align:"start", sortable:"false", value: "ID"},
         {text: "Name", align:"start", sortable:"false", value: "name"},
         {text: "Players", align:"start", sortable:"false", value: "players"},
-        {text: "Active Player", align:"start", sortable:"false", value: "activePlayer"},
+        {text: "Active Player", align:"start", sortable:"false", value: "currentPlayer"},
     ],
     games: [
         {gameID: 1, name: "game 1", players: ["joao","pedro","paulo","nuno"], activePlayer: "joao"},

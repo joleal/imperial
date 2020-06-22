@@ -19,7 +19,7 @@
             no-action
             >
             <template v-slot:prependIcon>
-              <v-badge color="pink" left overlap dot offset-x="0" offset-y="0" >
+              <v-badge color="pink" left overlap dot offset-x="0" offset-y="0" v-if="activeGames.length > 0" >
                     <v-icon>mdi-puzzle</v-icon>
                     </v-badge>
               </template>
@@ -28,15 +28,19 @@
               
               <v-list-item-title>
                 Games
-              </v-list-item-title>
-
-        
+              </v-list-item-title>       
             </template>
             <v-list-item 
-              v-for="(game, i) in ['game 1', 'game 2','game 3']" :key="i" link to="/about">
-              <v-list-item-title v-text="game"></v-list-item-title>
+              v-for="(game, i) in activeGames" :key="i" link :to="`/game/${game.ID}`">
+              <v-list-item-title v-text="game.name"></v-list-item-title>
               <v-list-item-action>
                 <v-icon color="pink lighten-1">mdi-play</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item link to="/create">
+              <v-list-item-title>Create game</v-list-item-title>
+              <v-list-item-action>
+                <v-icon color="blue lighten-1">mdi-plus</v-icon>
               </v-list-item-action>
             </v-list-item>
           </v-list-group>
@@ -125,10 +129,15 @@
   </v-app>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: "App",
   props: {
     source: String
+  },
+  computed: {
+    ...mapState(['activeGames'])
   },
   components: {},
   methods: {
