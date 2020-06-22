@@ -83,7 +83,7 @@ func GetActiveGames(user string) (*[]*SaveGame, error) {
 		log.Println(err)
 	}
 
-	var games []*SaveGame
+	games := make([]*SaveGame, 0)
 	for rows.Next() {
 		game := &SaveGame{}
 		err := rows.Scan(&game.ID, &game.Name)
