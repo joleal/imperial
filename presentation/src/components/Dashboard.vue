@@ -27,51 +27,28 @@
         </v-layout>
       </v-col>
     </v-row>
-    <v-row> 
-      <v-col cols="12" class="mb-4">
-        <h2 class="display-2 font-weight-bold mb-3">
-          Open Games
-        </h2>
-        
-
-            <v-layout child-flex>
-        <v-data-table dense
-            height="400px"
-            width="100%"
-            fixed-header
-            :headers="headers"
-            :items="activeGames"
-            :items-per-page="5"
-            class="elevation-1"
-        >
-            <template v-slot:item.gameID="{ item }">
-                <v-btn text small color="primary" to="/about">{{item.gameID}}</v-btn>
-            </template>
-            <template v-slot:item.players="{ item }">
-                <div v-for="(player, i) in item.players" :key="i" >{{ player }}</div>
-            </template>
-        </v-data-table> 
-        </v-layout>
-      </v-col>
-    </v-row>
     <v-row>
       <v-col>
-        {{ activeGames }}
+        <OpenGames></OpenGames>
       </v-col>
-    </v-row> 
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import OpenGames from "@/components/OpenGames.vue";
 
 export default {
   name: "Dashboard",
+  components: {
+    OpenGames
+  },
   methods: {
     
   },
   computed: {
-    ...mapState(['activeGames'])
+    ...mapState(['activeGames', 'openGames'])
   },
   data: () => ({
     headers:[

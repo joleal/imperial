@@ -1,13 +1,14 @@
 package models
 
 import (
+	"encoding/json"
 	"log"
 	"strings"
 )
 
 //SaveGame represents a saved game
 type SaveGame struct {
-	ID             int
+	ID             string
 	Name           string        `json:"name"`
 	GameSettings   gameSettings  `json:"settings"`
 	Players        []*gamePlayer `json:"players"`
@@ -31,8 +32,9 @@ type gameSettings struct {
 }
 
 type gamePlayer struct {
-	Name     string
+	Nickname string `json:"nickname"`
 	PlayerID string `json:"user_id"`
+	Email    string `json:"email"`
 	Money    int
 	Order    int
 	Investor bool
@@ -76,6 +78,7 @@ func GetActiveGames(user string) (*[]*SaveGame, error) {
 			ON gp.fk_game = g.game_id
 		WHERE 
 			g.game_finish = 0
+			AND g.game_start = 1
 			AND gp.fk_user = ?;`
 
 	rows, err := db.Query(sql, user)
@@ -91,6 +94,58 @@ func GetActiveGames(user string) (*[]*SaveGame, error) {
 			log.Println(err)
 			return nil, err
 		}
+		games = append(games, game)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &games, nil
+}
+
+//GetOpenGames gets games without all players
+func GetOpenGames() (*[]*SaveGame, error) {
+	db := CreateDb()
+	defer db.closeConnection()
+
+	//games
+	sql := `
+
+		SELECT 
+			game_id AS id,
+			name,
+			CONCAT('[', GROUP_CONCAT(JSON_OBJECT("user_id", user_id, "email", email, "nickname", nickname)), ']') AS players
+		FROM game g
+		INNER JOIN game_player gp 
+			ON gp.fk_game = g.game_id
+		INNER JOIN user u 
+			ON u.user_id = gp.fk_user
+		WHERE 
+			g.game_start = 0
+		GROUP BY 
+			game_id, name;`
+
+	rows, err := db.Query(sql)
+	if err != nil {
+		log.Println(err)
+	}
+
+	games := make([]*SaveGame, 0)
+	for rows.Next() {
+		game := &SaveGame{}
+		players := "[]"
+		err := rows.Scan(&game.ID, &game.Name, &players)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+
+		err = json.Unmarshal([]byte(players), &game.Players)
+		if err != nil {
+			panic(err) // This would normally be a normal Error http response but I've put this here so it's easy for you to test.
+		}
+
 		games = append(games, game)
 	}
 	if err := rows.Err(); err != nil {

@@ -20,8 +20,12 @@ axios.interceptors.request.use( async config => {
 
 const ImperialApi = {
     ActiveGames: async () => {
-        const response = await axios.get('/games');
+        const response = await axios.get('/games/active');
         return response.data;
+    },
+    OpenGames: async () => {
+      const response = await axios.get('/games/open');
+      return response.data;
     },
     CreateGame: async(options) => {
       await axios.post('/game',options);

@@ -19,7 +19,7 @@
             no-action
             >
             <template v-slot:prependIcon>
-              <v-badge color="pink" left overlap dot offset-x="0" offset-y="0" v-if="activeGames.length > 0" >
+              <v-badge color="pink" left overlap dot offset-x="0" offset-y="0" :value="activeGames.length > 0" >
                     <v-icon>mdi-puzzle</v-icon>
                     </v-badge>
               </template>

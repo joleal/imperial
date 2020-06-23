@@ -81,7 +81,8 @@ func main() {
 	secureHandle("/users", http.HandlerFunc(u.Users)).Methods("GET")
 
 	g := &controllers.Game{}
-	secureHandle("/games", http.HandlerFunc(g.GetActiveGames)).Methods("GET")
+	secureHandle("/games/active", http.HandlerFunc(g.GetActiveGames)).Methods("GET")
+	secureHandle("/games/open", http.HandlerFunc(g.GetOpenGames)).Methods("GET")
 	secureHandle("/game", http.HandlerFunc(g.CreateGame)).Methods("POST")
 
 	log.Println("Listing for requests at http://localhost:3333/")

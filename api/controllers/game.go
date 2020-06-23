@@ -13,6 +13,26 @@ type Game struct {
 	ID string
 }
 
+//GetOpenGames gets active games for logged user
+func (g *Game) GetOpenGames(w http.ResponseWriter, r *http.Request) {
+	// user
+	games, err := models.GetOpenGames()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(games)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write([]byte(jsonResponse))
+	w.Header().Set("Content-Type", "application/json")
+
+}
+
 //GetActiveGames gets active games for logged user
 func (g *Game) GetActiveGames(w http.ResponseWriter, r *http.Request) {
 	// user

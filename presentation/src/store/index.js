@@ -22,9 +22,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    updateOpenGamesList (context) {
-      let games = [];
-      context.commit('updateOpenGamesList', games);
+    async updateOpenGamesList (context) {
+      const data = await ImperialApi.OpenGames();
+      context.commit('updateOpenGamesList', data);
     },
     async updateActiveGamesList (context){
       const data = await ImperialApi.ActiveGames();

@@ -9,8 +9,8 @@ CREATE OR REPLACE PROCEDURE create_game
     IN startingMode varchar(20)
 )
 BEGIN
-    DECLARE game_id bigint unsigned;
-    SELECT uuid_short() INTO game_id;
+    DECLARE game_id VARCHAR(64);
+    SELECT CAST(uuid_short() AS VARCHAR(64)) INTO game_id;
 
     
 	INSERT INTO game 

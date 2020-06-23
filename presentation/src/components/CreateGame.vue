@@ -183,10 +183,12 @@ export default {
       } else {
         try {
           await ImperialApi.CreateGame(this.game);
+          this.$store.dispatch('updateState');
+          this.$router.push({ name: "Home" });
         } catch (err) {
           console.log(err);
         }
-        //this.$router.push({ name: "Home" });
+        
       }
     },
     clear() {},
